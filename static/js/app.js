@@ -37,7 +37,6 @@ function startUp() {
 startUp();
 
 
-
 // d3.selectAll("#selDataset").on("change",updatePlotly);
 
 // function updatePlotly() {
@@ -49,41 +48,92 @@ startUp();
 
 //sort
 
-d3.json(url).then(function(data) {
+function metadata(sample) {
+
+d3.json(url).then((data) =>{
+
+let entireData = data.samples;
+
+let barX = entireData.filter(sampleObj => sampleObj.id === sample);
+
+let emptyArray = barX[0];
+
+let PANEL = d3.select("#sample-metadata")
+
+PANEL.html("hr")
+
+for (key in emptyArray) {
+    PANEL.append("h6").text("${key.toUppercase()}: ${result[key]}")
+}
+buildGauge(result.wfreq);
+});
+};
+
+function barchart(sample) {
+
+d3.json(url).then((data) =>{
+
+let entireData = data.samples;
+
+let barX = entireData.filter(sampleObj => sampleObj.id === sample);
+
+let emptyArray = barX[0];
+
+let otu_ids1 = emptyArray.otu_ids1;
+console.log(barX);
+
+let otu_labels1 = emptyArray.otu_labels1;
+
+let sample_values1 = emptyArray.sample_values1;
+
+
+let layout = {
+    title:'Bubble',
+    hovermode:'closest',
+    margin: {t: 0},
+    xaxis: {title: 'test'},
+    margin:{t:30}
+};
 
 let trace1 = {
-     x:data.samples_values,
-     y:data.otu_ids,
-     type: "bar",
-     orientation: 'h',
+    x:otu_ids1,
+    y:sample_values1,
+    text:otu_labels1,
+    mode:"markers",
+    marker:{
+        size: sample_values1,
+        colour: otu_ids1,
+        colourscale:"earth"
+        }
+  
 };
+
 let data1 = [trace1];
 
-Plotly.newPlot("bar", data1);
+Plotly.newPlot("bubble", data1, layout);
+
+// });
+
+// let trace2 = {
+//      x:otu_ids1,
+//      y:sample_values1,
+//      type: "bar",
+//      orientation: 'h',
+// };
+// let data2 = [trace2];
+
+// Plotly.newPlot("bar", data2);
 
 });
 
-// d3.json(url).then(function(data) {
-// let trace2 = {
-// x:
-// y:
-// type:
+};
 
-// }
+// for sorting const top10Data = sortedData.slice(0, 10);
 
-// const xArray = [55, 49, 44, 24, 15];
-// const yArray = ["Italy","France","Spain","USA","Argentina"];
+// const sortedData = otuData.sort((a, b) => b.value - a.value);
 
-// const data = [{
-//   x: xArray,
-//   y: yArray,
-//   type: "bar",
-//   orientation: "h",
-//   marker: {color:"rgba(255,0,0,0.6)"}
-// }];
+// const otuNames = top10Data.map(entry => entry.otu);
 
-// const layout = {title:"World Wide Wine Production"};
-
-// Plotly.newPlot("bar", data, layout);
+// const filteredData = data.filter(item => item.id === desiredId);
 
 
