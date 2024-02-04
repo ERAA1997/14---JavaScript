@@ -19,7 +19,7 @@ function metadata(sample) {
             PANEL.append("h6").text(`${key.toUpperCase()}: ${emptyArray[key]}`);
         };
 
-        buildGauge(emptyArray.wfreq);
+        // buildGauge(emptyArray.wfreq);
     });
 }
 
